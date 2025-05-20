@@ -1,8 +1,23 @@
 
 # 실행 방법
+```
+// 프로젝트를 클론합니다.
+$ git clone https://github.com/kyhong222/nexon-recruit
 
+// 클론된 폴더로 이동합니다.
+$ cd nexon-recruit
 
+// docker compose 명령어를 사용하여 프로젝트를 가동합니다.
+// gateway endpoint는 localhost:3002입니다.
+$ docker compose up -d --build
 
+// docker compose 명령어를 사용하여 프로젝트를 종료합니다.
+$ docker compose down
+```
+
+# API 문서
+## document(with postman)
+https://documenter.getpostman.com/view/1305674/2sB2qXmiik
 
 # 구성
 본 프로젝트 구성은 크게 3개의 서버로 이루어져 있습니다.
