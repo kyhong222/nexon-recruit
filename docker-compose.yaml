@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - nexon-net
+
+  auth-server:
+    build:
+      context: ./nexon-auth-server
+      dockerfile: Dockerfile
+    container_name: auth-server
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/nest
+    depends_on:
+      - mongodb
+    networks:
+      - nexon-net
+
+  event-server:
+    build:
+      context: ./nexon-event-server
+      dockerfile: Dockerfile
+    container_name: event-server
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/nest
+    depends_on:
+      - mongodb
+    networks:
+      - nexon-net
+
+  gateway-server:
+    build:
+      context: ./nexon-gateway-server
+      dockerfile: Dockerfile
+    container_name: gateway-server
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/nest
+      - AUTH_SERVER_URL=http://auth-server:3000
+      - EVENT_SERVER_URL=http://event-server:3001
+    depends_on:
+      - auth-server
+      - event-server
+    networks:
+      - nexon-net
+
+volumes:
+  mongo-data:
+
+networks:
+  nexon-net:
+    driver: bridge
